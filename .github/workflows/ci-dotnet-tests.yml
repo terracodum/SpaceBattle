@@ -33,12 +33,12 @@ jobs:
       - name: Install Required Tools
         run: |
           dotnet new tool-manifest
-          dotnet add StarWars.Tests/StarWars.Tests.csproj package Moq
+          dotnet add SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj package Moq
 
       - name: Build
         run: |
-          dotnet build StarWars.Lib/StarWars.Lib.csproj --configuration Release
-          dotnet build StarWars.Tests/StarWars.Tests.csproj --configuration Release
+          dotnet build SpaceBattle.Lib/SpaceBattle.Lib.csproj --configuration Release
+          dotnet build SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj --configuration Release
 
       - name: Test
         run: dotnet test --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
