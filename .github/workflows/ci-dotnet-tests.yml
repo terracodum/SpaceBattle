@@ -7,7 +7,6 @@ on:
       - develop
   pull_request:
     branches:
-        
       - main
       - develop
 
@@ -32,15 +31,14 @@ jobs:
 
       - name: Install Required Tools
         run: |
-          dotnet new tool-manifest
           dotnet add SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj package Moq
           dotnet add SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj package coverlet.collector
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration Release
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
+        run: dotnet test SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
 
       - name: List coverage files (debug)
         run: ls -R coverage || echo "No coverage folder"
