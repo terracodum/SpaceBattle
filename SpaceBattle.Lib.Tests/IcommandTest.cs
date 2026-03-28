@@ -1,5 +1,5 @@
-﻿using Xunit;
-using StarWars.Lib; // добавьте это
+﻿using StarWars.Lib; // добавьте это
+using Xunit;
 
 namespace SpaceBattle.Test;
 

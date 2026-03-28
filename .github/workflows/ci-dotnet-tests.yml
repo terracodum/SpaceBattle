@@ -34,19 +34,21 @@ jobs:
         run: |
           dotnet new tool-manifest
           dotnet add SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj package Moq
+          dotnet add SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj package coverlet.collector
 
       - name: Build
-        run: |
-          dotnet build SpaceBattle.Lib/SpaceBattle.Lib.csproj --configuration Release
-          dotnet build SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj --configuration Release
+        run: dotnet build --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
+        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
+
+      - name: List coverage files (debug)
+        run: ls -R coverage || echo "No coverage folder"
 
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: 'coverage/*/coverage.cobertura.xml'
+          filename: 'coverage/**/coverage.cobertura.xml'
           badge: true
           format: 'markdown'
           output: 'both'
