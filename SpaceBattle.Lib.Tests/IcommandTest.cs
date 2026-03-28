@@ -1,6 +1,13 @@
-﻿namespace SpaceBattle.Test;
+﻿using Xunit;
+using StarWars.Lib; // добавьте это
 
-public class IcommandTest
+namespace SpaceBattle.Test;
+
+public class ICommandTest
 {
-    private readonly ICommand cmd = new ICommand();
+    [Fact]
+    public void InterfaceIsAvailable()
+    {
+        Assert.NotNull(typeof(ICommand));
+    }
 }
