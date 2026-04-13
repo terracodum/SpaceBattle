@@ -38,7 +38,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Test
-        run: dotnet test SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj --no-build --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
+        run: dotnet test SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --logger trx --results-directory coverage
 
       - name: List coverage files (debug)
         run: ls -R coverage || echo "No coverage folder"

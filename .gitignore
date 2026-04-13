@@ -401,3 +401,6 @@ FodyWeavers.xsd
 
 venv/
 .DS_store
+
+# Claude Code
+CLAUDE.md
