@@ -1,7 +1,7 @@
-using Xunit;
+﻿using System;
 using System.Linq;
 using StarWars.Lib;
-using System;
+using Xunit;
 
 namespace SpaceBattle.Test;
 

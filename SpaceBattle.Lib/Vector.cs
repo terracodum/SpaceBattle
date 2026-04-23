@@ -1,4 +1,4 @@
-namespace StarWars.Lib;
+﻿namespace StarWars.Lib;
 
 public class Vector
 {
