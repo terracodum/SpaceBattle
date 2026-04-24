@@ -8,9 +8,9 @@ using Xunit;
 
 namespace StarWars.Test;
 
-public class MoveCommandIoCTests
+public class ActionsStartIoCTests
 {
-    public MoveCommandIoCTests()
+    public ActionsStartIoCTests()
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
         var iocScope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"));
