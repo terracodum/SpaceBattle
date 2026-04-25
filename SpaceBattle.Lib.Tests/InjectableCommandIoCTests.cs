@@ -1,7 +1,7 @@
-using Xunit;
 ﻿using Hwdtech;
 using Hwdtech.Ioc;
 using StarWars.Lib;
+using Xunit;
 
 public class RegisterDependencyCommandInjectableCommandTests
 {
