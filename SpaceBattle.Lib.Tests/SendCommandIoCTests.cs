@@ -1,10 +1,11 @@
 ﻿using Hwdtech;
 using Hwdtech.Ioc;
 using Moq;
-using Xunit;
 using StarWars.Lib;
+using Xunit;
 
 namespace StarWars.Test;
+
 public class RegisterIoCDependencySendCommandTests
 {
     public RegisterIoCDependencySendCommandTests()
