@@ -1,7 +1,7 @@
+﻿using System;
 using Moq;
-using Xunit;
 using StarWars.Lib;
-using System;
+using Xunit;
 
 namespace StarWars.Test;
 
