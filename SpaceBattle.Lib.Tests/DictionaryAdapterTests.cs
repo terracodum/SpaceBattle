@@ -19,6 +19,9 @@ public static class VelocityResolver
 
 public class DictionaryAdapterTests
 {
+    private static readonly IReadOnlyList<IMethodHandler> DefaultHandlers =
+        [new GetterMethodHandler(), new SetterMethodHandler()];
+
     private static readonly IReadOnlyDictionary<string, Func<IDictionary<string, object>, object>> NoStrategies =
         new Dictionary<string, Func<IDictionary<string, object>, object>>();
 
@@ -28,7 +31,7 @@ public class DictionaryAdapterTests
         var location = new Vector([1, 2]);
         var dict = new Dictionary<string, object> { ["Location"] = location, ["Velocity"] = new Vector([0, 0]) };
 
-        var adapter = DictionaryAdapter<IMovingObject>.Create(dict, NoStrategies);
+        var adapter = DictionaryAdapter<IMovingObject>.Create(dict, NoStrategies, DefaultHandlers);
 
         Assert.Equal(location, adapter.Location);
     }
@@ -37,7 +40,7 @@ public class DictionaryAdapterTests
     public void Set_WritesPropertyToDictionary()
     {
         var dict = new Dictionary<string, object> { ["Location"] = new Vector([0, 0]), ["Velocity"] = new Vector([0, 0]) };
-        var adapter = DictionaryAdapter<IMovingObject>.Create(dict, NoStrategies);
+        var adapter = DictionaryAdapter<IMovingObject>.Create(dict, NoStrategies, DefaultHandlers);
         var newLocation = new Vector([5, 5]);
 
         adapter.Location = newLocation;
@@ -55,7 +58,7 @@ public class DictionaryAdapterTests
             ["Velocity"] = VelocityResolver.Resolve
         };
 
-        var adapter = DictionaryAdapter<IMovingObject>.Create(dict, strategies);
+        var adapter = DictionaryAdapter<IMovingObject>.Create(dict, strategies, DefaultHandlers);
 
         Assert.Equal(velocity, adapter.Velocity);
     }
@@ -64,8 +67,17 @@ public class DictionaryAdapterTests
     public void Get_ThrowsWhenKeyMissingAndNoStrategy()
     {
         var dict = new Dictionary<string, object>();
-        var adapter = DictionaryAdapter<IMovingObject>.Create(dict, NoStrategies);
+        var adapter = DictionaryAdapter<IMovingObject>.Create(dict, NoStrategies, DefaultHandlers);
 
         Assert.Throws<KeyNotFoundException>(() => adapter.Velocity);
+    }
+
+    [Fact]
+    public void Invoke_ThrowsWhenNoHandlerRegistered()
+    {
+        var dict = new Dictionary<string, object>();
+        var adapter = DictionaryAdapter<IMovingObject>.Create(dict, NoStrategies, []);
+
+        Assert.Throws<NotSupportedException>(() => adapter.Velocity);
     }
 }
