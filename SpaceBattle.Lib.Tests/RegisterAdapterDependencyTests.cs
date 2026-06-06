@@ -19,6 +19,9 @@ public static class TestVelocityResolver
 
 public class RegisterAdapterDependencyTests
 {
+    private readonly IReadOnlyList<IMethodHandler> _handlers =
+        [new GetterMethodHandler(), new SetterMethodHandler()];
+
     public RegisterAdapterDependencyTests()
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
@@ -27,10 +30,17 @@ public class RegisterAdapterDependencyTests
         new InitScopeBasedIoCImplementationCommand().Execute();
     }
 
+    private RegisterAdapterDependency<IMovingObject> BuildCommand()
+    {
+        var strategies = new AdapterStrategyReader<IMovingObject>(Assembly.GetExecutingAssembly()).Read();
+        var factory = new DictionaryAdapterFactory<IMovingObject>(_handlers);
+        return new RegisterAdapterDependency<IMovingObject>(factory, strategies);
+    }
+
     [Fact]
     public void Execute_RegistersAdapterInIoC()
     {
-        new RegisterAdapterDependency<IMovingObject>(Assembly.GetExecutingAssembly()).Execute();
+        BuildCommand().Execute();
 
         var dict = new Dictionary<string, object>
         {
@@ -47,7 +57,7 @@ public class RegisterAdapterDependencyTests
     [Fact]
     public void Execute_AdapterReadsLocationFromDictionary()
     {
-        new RegisterAdapterDependency<IMovingObject>(Assembly.GetExecutingAssembly()).Execute();
+        BuildCommand().Execute();
 
         var location = new Vector([7, 8]);
         var dict = new Dictionary<string, object> { ["Location"] = location, ["vel"] = new Vector([0, 0]) };
@@ -60,7 +70,7 @@ public class RegisterAdapterDependencyTests
     [Fact]
     public void Execute_AdapterUsesCustomStrategyForVelocity()
     {
-        new RegisterAdapterDependency<IMovingObject>(Assembly.GetExecutingAssembly()).Execute();
+        BuildCommand().Execute();
 
         var velocity = new Vector([5, 6]);
         var dict = new Dictionary<string, object> { ["Location"] = new Vector([0, 0]), ["vel"] = velocity };
