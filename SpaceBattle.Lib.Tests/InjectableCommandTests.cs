@@ -1,5 +1,4 @@
-using System;
-using Hwdtech;
+﻿using System;
 using Moq;
 using StarWars.Lib;
 using Xunit;
