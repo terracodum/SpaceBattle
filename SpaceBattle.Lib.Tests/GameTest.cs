@@ -59,6 +59,4 @@ public class GameTest
 
         Assert.Equal([1, 2], executionOrder);
     }
-
-
 }
