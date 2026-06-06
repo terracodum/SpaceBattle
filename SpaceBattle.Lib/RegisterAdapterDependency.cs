@@ -1,37 +1,29 @@
-﻿using System.Reflection;
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace StarWars.Lib;
 
 public class RegisterAdapterDependency<T> : ICommand where T : class
 {
-    private readonly Assembly _assembly;
+    private readonly IAdapterFactory<T> _factory;
+    private readonly IReadOnlyDictionary<string, Func<IDictionary<string, object>, object>> _strategies;
 
-    public RegisterAdapterDependency(Assembly assembly)
+    public RegisterAdapterDependency(
+        IAdapterFactory<T> factory,
+        IReadOnlyDictionary<string, Func<IDictionary<string, object>, object>> strategies)
     {
-        _assembly = assembly;
+        _factory = factory;
+        _strategies = strategies;
     }
 
     public void Execute()
     {
-        var strategies = _assembly
-            .GetCustomAttributes<AdapterAttribute>()
-            .Where(a => a.InterfaceType == typeof(T))
-            .ToDictionary(
-                a => a.PropertyName,
-                a => (Func<IDictionary<string, object>, object>)
-                    a.ResolverType
-                        .GetMethod("Resolve", BindingFlags.Public | BindingFlags.Static)!
-                        .CreateDelegate(typeof(Func<IDictionary<string, object>, object>))
-            );
-
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             $"Adapters.{typeof(T).Name}",
             (Func<object, object>)(obj =>
-                DictionaryAdapter<T>.Create(
+                _factory.Create(
                     (IDictionary<string, object>)((object[])obj)[0],
-                    strategies
+                    _strategies
                 )
             )
         ).Execute();
